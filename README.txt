@@ -51,3 +51,60 @@ SIM6502.SOURCE       PO  VB    255  6233   c source code
 I chose "SIM6502" as my HLQ but you can choose another if you like.
 
 
+Installation Instructions:
+------------ ------------
+
+1) Allocate the above datasets. 
+   Put them on either TSO001 or TSO002 if you are using MVS Turnkey 5.
+
+2) Using File Transfer from within your terminal emulator or an FTP client:
+   Copy the .c modules to the SOURCE PDS.
+   Copy the .h modules to the INCLUDE PDS. 
+   Copy the .jcl modules to the CNTL PDS.
+
+3) Make any local mods needed to the JCL GCC6502 in SIM6502.CNTL and submit to compile/link the SIM6502 executable into SIM6502.LINKLIB.
+
+4) Using whatever means you like, copy the contents of SAMPLE.hex to SIM6502.HEXIN.
+
+5) Make any local mods needed to the JCL RUN6502 in SIM6502.CNTL and submit to verify correct installation.
+You should see output that looks like this:
+
+IEF375I  JOB /SIMRUN  / START 24301.1312
+IEF376I  JOB /SIMRUN  / STOP  24301.1312 CPU    0MIN 00.03SEC SRB    0MIN 00.00SEC
+SIM6502 - INITIALIZE VIRTUAL RAM
+SIM6502 - CALL INTEL HEX FILE LOADER
+INTEL HEX LOADER - STARTING
+OPEN HEXIN FILE
+
+buff: :11020000AD00C0C900D015AD01C0C930F0068D01D017
+
+numbytes: 11
+addr: 0200
+
+buff: :100211004C0702A9008D01D04C0002A9FF8D00D02E
+
+numbytes: 10
+addr: 0211
+
+buff: :030221004C1E026E
+
+numbytes: 03
+addr: 0221
+INTEL HEX LOADER - FINISHED
+SIM6502 - TRY TO OPEN INPUT FILE MYDATA
+SIM6502 - RESET THE 6502 CORE
+SIM6502 - RUN THE SIMULATOR
+SIM6502 INPUT FROM MYDATA: ABCDEF0
+
+SIM6502 OUTPUT: ABCDEF
+SIM6502 INPUT FROM MYDATA: GHIJKLMNOPQR0
+
+SIM6502 OUTPUT: GHIJKLMNOPQR
+
+-------------------------------------------------------------------------------------------
+
+If you see the above in your listing, CONGRATULATIONS you have correctly installed SIM6502!
+
+Proceed to README.io to learn how to to perform I/O to and from your 6502 code.
+
+
