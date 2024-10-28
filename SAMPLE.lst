@@ -1,0 +1,20 @@
+pc = 512                        .org $0200
+RREC = C000               rrec  .equ $C000
+GETB = C001               getb  .equ $C001
+EXIT = D000               exit  .equ $D000
+OUTP = D001               outp  .equ $D001
+0200 : AD 00 C0           begin lda rrec
+0203 : C9 00                    cmp #$00
+0205 : D0 15                    bne done1
+0207 : AD 01 C0           loop  lda getb
+020A : C9 30                    cmp #'0'
+020C : F0 06                    beq done
+020E : 8D 01 D0                 sta outp
+0211 : 4C 07 02                 jmp loop
+0214 : A9 00              done  lda #$00
+0216 : 8D 01 D0                 sta outp
+0219 : 4C 00 02                 jmp begin
+021C : A9 FF              done1 lda #$FF
+021E : 8D 00 D0           dloop sta exit
+0221 : 4C 1E 02                 jmp dloop
+0224                            .end
