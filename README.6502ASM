@@ -1,0 +1,59 @@
+6502ASM and YOU
+
+
+When you assemble your 6502 code the assember usually
+creates a hex file of 6502 machine code in the
+INTEL HEX file format.  
+
+In the RUN6502 JCL there is a DD called "HEXIN".
+
+Before you run SIM6502 you need to refresh the "HEXIN"
+file with the newly assembled 6502 machine code in the
+INTEL HEX file format. You can use any method you like
+to do that. I just open the HEXIN PS file in an editor
+(RPF or RFE) and just cut and paste as there aren't
+that many lines. But you can use the FILE TRANSFER
+feature of your terminal emulator or you can use
+an FTP client.
+
+
+You can certainly use your favorite 6502 assembler to 
+assemble your code but I want to let you know that
+I have written a Python-based 6502 Assembler.
+
+It is in my 6502ASM Github repository.
+
+My Assembler takes your 6502 code as input and, if the assembly is
+successful, creates a .lst file and a .hex file.
+
+Here is an example of a .lst file:
+
+cat SAMPLE.lst
+pc = 512                        .org $0200
+RREC = C000               rrec  .equ $C000
+GETB = C001               getb  .equ $C001
+EXIT = D000               exit  .equ $D000
+OUTP = D001               outp  .equ $D001
+0200 : AD 00 C0           begin lda rrec
+0203 : C9 00                    cmp #$00
+0205 : D0 15                    bne done1
+0207 : AD 01 C0           loop  lda getb
+020A : C9 30                    cmp #'0'
+020C : F0 06                    beq done
+020E : 8D 01 D0                 sta outp
+0211 : 4C 07 02                 jmp loop
+0214 : A9 00              done  lda #$00
+0216 : 8D 01 D0                 sta outp
+0219 : 4C 00 02                 jmp begin
+021C : A9 FF              done1 lda #$FF
+021E : 8D 00 D0           dloop sta exit
+0221 : 4C 1E 02                 jmp dloop
+0224                            .end
+
+and here is an example of its partner .hex file:
+
+cat SAMPLE.hex
+:11020000AD00C0C900D015AD01C0C930F0068D01D017
+:100211004C0702A9008D01D04C0002A9FF8D00D02E
+:030221004C1E026E
+
