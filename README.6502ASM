@@ -57,3 +57,8 @@ cat SAMPLE.hex
 :100211004C0702A9008D01D04C0002A9FF8D00D02E
 :030221004C1E026E
 
+
+Take a look at this one...
+SAMPLE2 is a little less trivial example.
+It reads in single digit addition and subtraction
+math problems and outputs its answers to the printer.
