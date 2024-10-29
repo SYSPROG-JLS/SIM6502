@@ -1,0 +1,66 @@
+pc = 512                        .org $0200
+RREC = C000               rrec  .equ $C000
+GETB = C001               getb  .equ $C001
+EXIT = D000               exit  .equ $D000
+OUTP = D001               outp  .equ $D001
+0200 : AD 00 C0           begin lda rrec
+0203 : C9 00                    cmp #$00
+0205 : D0 74                    bne done1
+0207 : A2 00                    ldx #0
+0209 : AD 01 C0           loop  lda getb
+020C : 9D 83 02                 sta buf,x
+020F : C9 23                    cmp #'#'
+0211 : F0 04                    beq docal
+0213 : E8                       inx
+0214 : 4C 09 02                 jmp loop
+0217 : 38                 docal sec
+0218 : A2 00                    ldx #0
+021A : BD 83 02                 lda buf,x
+021D : E9 30                    sbc #48 
+021F : 8D 8D 02                 sta first
+0222 : E8                       inx 
+0223 : BD 83 02                 lda buf,x
+0226 : 8D 8E 02                 sta op
+0229 : E8                       inx
+022A : BD 83 02                 lda buf,x
+022D : E9 30                    sbc #48
+022F : 8D 8F 02                 sta secnd
+0232 : AD 8E 02                 lda op
+0235 : C9 2B                    cmp #'+'
+0237 : F0 0d                    beq doadd
+0239 : AD 8D 02           dosub lda first
+023C : 38                       sec
+023D : ED 8F 02                 sbc secnd
+0240 : 8D 90 02                 sta res
+0243 : 4C 50 02                 jmp prtr
+0246 : AD 8D 02           doadd lda first
+0249 : 18                       clc
+024A : 6D 8F 02                 adc secnd
+024D : 8D 90 02                 sta res
+0250 : 18                 prtr  clc
+0251 : AD 90 02                 lda res
+0254 : 69 30                    adc #48
+0256 : 8D 87 02                 sta buf+4
+0259 : A9 3D                    lda #'='
+025B : 8D 86 02                 sta buf+3
+025E : A9 23                    lda #'#'
+0260 : 8D 88 02                 sta buf+5
+0263 : A2 00                    ldx #0
+0265 : BD 83 02           ploop lda buf,x
+0268 : C9 23                    cmp #'#'
+026A : F0 07                    beq done
+026C : 8D 01 D0                 sta outp
+026F : E8                       inx
+0270 : 4C 65 02                 jmp ploop
+0273 : A9 00              done  lda #$00
+0275 : 8D 01 D0                 sta outp
+0278 : 4C 00 02                 jmp begin
+027B : A9 FF              done1 lda #$FF
+027D : 8D 00 D0           dloop sta exit
+0280 : 4C 7D 02                 jmp dloop
+0283 : Reserved 10 Bytes  buf   .ds 10
+028D : Reserved 1 Bytes   first .ds 1
+028E : Reserved 1 Bytes   op    .ds 1
+028F : Reserved 1 Bytes   secnd .ds 1
+0290 : Reserved 2 Bytes   res   .ds 2
+0292                            .end
