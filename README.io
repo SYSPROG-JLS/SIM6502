@@ -78,6 +78,10 @@ As in the following code fragment:
 done  lda #$00
       sta outp
 
+It is IMPORTANT to note that from a 6502 code standpoint you do
+EVERYTHING in ASCII. SIM6502 handles all ASCII to EBCDIC and 
+EBCDIC to ASCII translations for you.
+
 
 Finally, in order to exit your 6502 code and cleanly end SIM6502 you need to code the
 following:
